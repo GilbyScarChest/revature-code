@@ -9,14 +9,22 @@ namespace MediaWorld.Client
     internal class Program
     {
         /// <summary>
-        /// starts the application
+        /// Starts the project
         /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
+        public static void Main()
         {
-            var helper = MediaSingleton.GetInstance();
-            // var helper2 = new MediaSingleton();
-            Console.WriteLine(helper);
+            Play();
+        }
+
+        private static void Play()
+        {
+            var mediaPlayer = MediaPlayerSingleton.GetInstance();
+
+            Music s = new Song();
+            Music a = new Audible();
+
+            mediaPlayer.Play(s);
+            mediaPlayer.Play(a);
         }
     }
 }
