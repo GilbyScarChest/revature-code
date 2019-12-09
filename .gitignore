@@ -3,6 +3,8 @@
 **/obj/
 **/.vscode/
 
+# nodejs
+node_modules/
 
 # vagrant
 **/.vagrant/
