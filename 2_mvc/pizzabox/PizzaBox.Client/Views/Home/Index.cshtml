@@ -1,0 +1,62 @@
+﻿@model PizzaBox.Client.Models.Pizza
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <!-- <h1 class="display-4">@ViewBag.Name</h1>
+    <h1 class="display-4">@ViewData["Name"]</h1>
+    <h1 class="display-4">@TempData["Name"]</h1> -->
+    @if (ViewBag.Pizza != null)
+    {
+        <h1 class="display-4">@ViewBag.Pizza.Crust</h1>
+        <h1 class="display-4">@ViewBag.Pizza.Size</h1>
+    }
+    
+</div>
+
+
+<!-- <form action="/home/order" method="post">
+    @foreach (var c in Model.Crusts)
+    {
+        <input type="radio" name="crust" value="@c" />
+        <label>@c</label>
+    }
+
+    @foreach (var s in Model.Crusts)
+    {
+        <input type="radio" name="size" value="@s" />
+        <label>@s</label>
+    }
+    
+    <input type="submit" value="order" />
+</form> -->
+
+<!-- We need a using statement here because this form needs its own context -->
+@using (Html.BeginForm("order", "home")) 
+{
+    @Html.AntiForgeryToken()
+    foreach(var c in Model.Crusts)
+    {
+        @Html.RadioButtonFor(m => m.Crust, @c)
+        @Html.LabelFor(m => m.Crust, c)
+        @Html.ValidationMessageFor(m => m.Crust)
+    }
+
+    foreach(var s in Model.Sizes)
+    {
+        @Html.RadioButtonFor(s => s.Size, @s) 
+        @Html.LabelFor(s => s.Size, s)
+        @Html.ValidationMessageFor(s => s.Size)
+    }
+
+    @Html.LabelFor(m => m.Quantity)
+    @Html.TextBoxFor(m => m.Quantity)
+    @Html.ValidationMessageFor(m => m.Quantity)
+
+    @Html.LabelFor(m => m.Name) 
+    @Html.TextBoxFor(m => m.Name)
+    @Html.ValidationMessageFor(m => m.Name)
+    <input type="Submit" value="order"/>
+}
