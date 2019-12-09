@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using MediaWorld.Domain.Abstracts;
 using MediaWorld.Domain.Factories;
 using MediaWorld.Domain.Models;
+using MediaWorld.Storing.Connections;
 
 namespace MediaWorld.Storing.Repositories
 {
@@ -15,10 +16,30 @@ namespace MediaWorld.Storing.Repositories
                 return _mediaLibrary;
             }
         }
+
         public MediaRepository()
         {
             Initialize();
         }
+
+        public void Add(AMedia media)
+        {
+            _mediaLibrary.Add(media);
+        }
+
+        public void Update(AMedia media)
+        {
+            var mi = _mediaLibrary.Find(m => m.Title == media.Title);
+            mi = media;
+            Save();
+        }
+
+        public void Save()
+        {
+            var fs = new FileSystemConnector();
+            fs.WriteXml(_mediaLibrary);
+        }
+
 
         private List<AMedia> Initialize()
         {
@@ -28,14 +49,8 @@ namespace MediaWorld.Storing.Repositories
             if (_mediaLibrary == null)
             {
                 _mediaLibrary = new List<AMedia>();
+                _mediaLibrary.AddRange(new FileSystemConnector().ReadXml());
 
-                _mediaLibrary.AddRange(new AMedia[]
-                {
-                    audioFactory.Create<Book>(),
-                    audioFactory.Create<Song>(),
-                    videoFactory.Create<Movie>(),
-                    videoFactory.Create<Photo>()
-                });
             }
 
             return _mediaLibrary;
