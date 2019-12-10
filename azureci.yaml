@@ -14,3 +14,11 @@ stages:
           - script: |
               dotnet build 03_devops/Devops.sln
 
+  - stage: test
+    jobs:
+      - job: aspnet_test
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: dotnet test 03_devops/Devops.sln --collect:"XPlat Code Coverage"
+
