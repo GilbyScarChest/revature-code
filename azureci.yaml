@@ -37,9 +37,9 @@ stages:
         steps:
           - task: UseDotNet@2
               inputs:
-              packageType: 'sdk'
-              version: '3.1.100'
-              name: 'dotnet-sonarscanner'
+                packageType: 'sdk'
+                version: '3.1.100'
+          - script: dotnet tool install --global dotnet-sonarscanner
           - script: |
               dotnet sonarscanner begin /k:devops-tyler /d:sonar-login=$SONAR_TOKEN /o:gilbyscarchest
               dotnet build 03_devops/Devops.sln
