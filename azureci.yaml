@@ -28,7 +28,7 @@ stages:
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: cobertura
-              summaryFileLocation: './03_devops/Devops.Test/TestResults/coverage.cobertura.xml'
+              summaryFileLocation: '**/coverage.cobertura.xml'
   - stage: analyze
     jobs:
       - job:
@@ -41,7 +41,7 @@ stages:
               version: '3.1.100'
           - script: dotnet tool install --global dotnet-sonarscanner
           - script: |
-              dotnet sonarscanner begin /k:devops-tyler /d:sonar-login=$SONAR_TOKEN /o:gilbyscarchest
+              dotnet sonarscanner begin /k:devops-tyler /d:sonar-login=$SONAR_TOKEN /d:sonar.host.url=https://sonarcloud.io /o:gilbyscarchest
               dotnet build 03_devops/Devops.sln
               dotnet test 03_devops/Devops.sln
               dotnet sonarscanner end /d:sonar-login=$SONAR_TOKEN
