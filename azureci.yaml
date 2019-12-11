@@ -29,24 +29,33 @@ stages:
             inputs:
               codeCoverageTool: cobertura
               summaryFileLocation: './03_devops/Devops.Test/TestResults/coverage.cobertura.xml'
-#   - stage: analyze
-#     jobs:
-#       - job:
-#         pool:
-#           vmImage: ubuntu-18.04
-#         steps:
-#           - script: dotnet install --global dotnet-sonarscanner
-#           - script: |
-#             sonarscanner begin /k:devops-tyler /d:sonar-login=$(SONAR_LOGIN)
-#             dotnet build
-#             dotnet test
-#             sonarscanner end /d:sonar-login=$(SONAR_LOGIN)
-#   - stage: pack
-#     jobs:
-#       - job:
-#         pool:
-#           vmImage: ubuntu-18.04
-#         steps:
-#           - script: docker image build -f 03_devops/dockerfile -t gilbyscarchest01/devops:$(BUILD_NAME)
-#           - script: docker login -username $(DOCKER_USERNAME) --password $(DOCKER_TOKEN)
-#           - script: docker image push gilbyscarchest01/devops:$(BUILD_NAME)
+  - stage: analyze
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: dotnet tool install --global dotnet-sonarscanner
+          - script: |
+              sonarscanner begin /k:devops-tyler /d:sonar-login=$SONAR_TOKEN /o:gilbyscarchest
+              dotnet build
+              dotnet test
+              dotnet sonarscanner end /d:sonar-login=$SONAR_TOKEN
+            env:
+              SONAR_TOKEN: $(SONAR_LOGIN)
+  - stage: pack
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - script: docker image build -f 03_devops/dockerfile -t gilbyscarchest01/devops:$BUILD_NAME
+            env:
+              BUILD_NAME: $(Build.DefinitionName)
+          - script: docker login -username $DOCKER_USERNAME --password $DOCKER_TOKEN
+            env:
+              DOCKER_TOKEN: $(DOCKER_TOKEN)
+              DOCKER_USERNAME: $(DOCKER_USER)
+          - script: docker image push gilbyscarchest01/devops:$BUILD_NAME
+            env:
+              BUILD_NAME: $(Build.DefinitionName)
