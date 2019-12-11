@@ -55,7 +55,7 @@ stages:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: docker image build -f 03_devops/dockerfile -t gilbyscarchest01/devops:$BUILD_NAME
+          - script: docker image build -f 03_devops/dockerfile -t gilbyscarchest01/devops:$BUILD_NAME ./03_devops
             env:
               BUILD_NAME: $(Build.DefinitionName)
           - script: docker login -username $DOCKER_USERNAME --password $DOCKER_TOKEN
