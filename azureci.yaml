@@ -20,7 +20,7 @@ stages:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - script: dotnet test 03/devops/Devops.sln --logger trx --collect:"XPlat Code Coverage"
+          - script: dotnet test 03_devops/Devops.sln --logger trx --collect:"XPlat Code Coverage"
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: cobertura
