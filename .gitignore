@@ -1,3 +1,6 @@
+# coverlet
+TestResults/
+
 # dotnet
 **/bin/
 **/obj/
